@@ -1,0 +1,73 @@
+{{!
+  @template block_forumdashboard/admin
+}}
+<form method="post" action="{{action}}">
+  <input type="hidden" name="block_forumdashboard_action" value="submit">
+  <input type="hidden" name="block_forumdashboard_configdata" id="block_forumdashboard_configdata" value="{{config}}">
+  <input type="hidden" name="block_forumdashboard_metricitems" id="block_forumdashboard_metricitems" value="{{metricitems_json}}">
+  <table class="table table-hover table-bordered" id="block_forumdashboard_table">
+    <thead>
+      <tr>
+        <th>{{#str}}name{{/str}}</th>
+        <th>{{#str}}settings{{/str}}</th>
+        <th>{{#str}}action{{/str}}</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr id="block_forumdashboard_prototypetr" style="display: none;">
+        <td class="block_forumdashboard_nametd">
+        </td>
+        <td class="block_forumdashboard_settingstd">
+          <label>
+            <input type="checkbox" data-type="bool" data-target="initial">
+            {{#str}}initial, block_forumdashboard{{/str}}
+          </label>
+          <label>
+            <input type="checkbox" data-type="bool" data-target="showaverage">
+            {{#str}}average, block_forumdashboard{{/str}}
+          </label>
+          <input type="text" data-type="text" data-target="bgcolor" class="form-control d-inline-block" style="width: 7em;" placeholder="{{#str}}bgcolor, block_forumdashboard{{/str}}">
+          <input type="text" data-type="text" data-target="textcolor" class="form-control d-inline-block" style="width: 7em;" placeholder="{{#str}}textcolor, block_forumdashboard{{/str}}">
+        </td>
+        <td class="block_forumdashboard_actiontd">
+          <a href="javascript:void(0);" class="block_forumdashboard_actionbtn" data-action="moveup"><i class="fa fa-arrow-up"></i></a>
+          <a href="javascript:void(0);" class="block_forumdashboard_actionbtn" data-action="movedown"><i class="fa fa-arrow-down"></i></a>
+          <a href="javascript:void(0);" class="block_forumdashboard_actionbtn text-danger" data-action="remove"><i class="fa fa-trash"></i></a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="row">
+    <div class="container-fluid">
+      <p>{{#str}}addmetricitem, block_forumdashboard{{/str}}</p>
+      <div>
+        <select class="form-control d-inline-block w-auto" id="block_forumdashboard_newitem">
+          {{#metricitems}}
+            <option value="{{name}}">{{namestr}}</option>
+          {{/metricitems}}
+        </select>
+        <label>
+          <input type="checkbox" id="block_forumdashboard_newinitial">
+          {{#str}}initial, block_forumdashboard{{/str}}
+        </label>
+        <label>
+          <input type="checkbox" id="block_forumdashboard_newshowaverage">
+          {{#str}}average, block_forumdashboard{{/str}}
+        </label>
+      </div>
+      <div>
+        <button class="btn btn-success" type="button" id="block_forumdashboard_addbtn">
+          {{#str}}add{{/str}}
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="row pt-3">
+    <div class="container-fluid text-center">
+      <button class="btn btn-primary" type="submit">
+        {{#str}}save{{/str}}
+      </button>
+      <a href="{{cancel}}">{{#str}}cancel{{/str}}</a>
+    </div>
+  </div>
+</form>
