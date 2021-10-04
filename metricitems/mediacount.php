@@ -21,7 +21,8 @@ class mediacount extends metricitem {
         'group by posts.userid having userid = ?', [$userid])
       : $DB->get_record_sql('select group_concat(message) msg from {forum_posts} group by userid having userid = ?', [$userid]);
 
-    return report_discussion_metrics_get_mulutimedia_num($record->msg)->num;
+    $mediacount = report_discussion_metrics_get_mulutimedia_num($record->msg);
+    return $mediacount ? $mediacount->num : 0;
   }
 
   public function get_average($scope) {
@@ -35,7 +36,8 @@ class mediacount extends metricitem {
     $sum = 0;
 
     foreach ($records as $record) {
-      $sum += report_discussion_metrics_get_mulutimedia_num($record->msg)->num;
+      $mediacount = report_discussion_metrics_get_mulutimedia_num($record->msg);
+      $sum += $mediacount ? $mediacount->num : 0;
     }
 
     return $sum / count($records);
