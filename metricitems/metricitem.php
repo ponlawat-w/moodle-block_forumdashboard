@@ -71,5 +71,4 @@ abstract class metricitem {
     ];
     return $OUTPUT->render_from_template('block_forumdashboard/metricitem', $data);
   }
-
 }

@@ -19,6 +19,9 @@ $string['addmetricitem'] = 'Add a new item';
 $string['identifier_averagedefault'] = 'Average: {$a}';
 
 $string['confirmremove'] = 'Are you sure you want to remove this item?';
+$string['item_discussioncount'] = 'Discussion count';
+$string['identifier_discussioncount'] = '{$a} discussion';
+$string['identifier_discussioncount_plural'] = '{$a} discussions';
 $string['item_e1r'] = '1st level reply';
 $string['identifier_e1r'] = '{$a} 1<sup>st</sup> level reply';
 $string['identifier_e1r_plural'] = '{$a} 1<sup>st</sup> level replies';

@@ -2,6 +2,8 @@
 
 namespace block_forumdashboard\metricitems;
 
+include_once(__DIR__ . '/../lib.php');
+
 class mediacount extends metricitem {
 
   public static $itemname = 'mediacount';
@@ -10,15 +12,32 @@ class mediacount extends metricitem {
   public static $default_bgcolor = '#bfbfbf';
   public static $default_textcolor = '#000000';
 
-  public function __construct($instanceconfig) {
-    parent::__construct($instanceconfig);
-  }
-
   public function get_value($scope, $userid) {
-    return 0;
+    global $DB;
+
+    $record = $scope ?
+      $DB->get_record_sql('select group_concat(posts.message) msg from {forum_posts} posts ' .
+        'join {forum_discussions} discussions on posts.discussion = discussions.id '  .
+        'group by posts.userid having userid = ?', [$userid])
+      : $DB->get_record_sql('select group_concat(message) msg from {forum_posts} group by userid having userid = ?', [$userid]);
+
+    return report_discussion_metrics_get_mulutimedia_num($record->msg)->num;
   }
 
   public function get_average($scope) {
-    return 0;
+    global $DB;
+
+    $records = $scope ?
+      $DB->get_records_sql('select group_concat(posts.message) msg from {forum_posts} posts ' .
+        'join {forum_discussions} discussions on posts.discussion = discussions.id group by posts.userid')
+      : $DB->get_records_sql('select group_concat(message) msg from {forum_posts} group by userid');
+
+    $sum = 0;
+
+    foreach ($records as $record) {
+      $sum += report_discussion_metrics_get_mulutimedia_num($record->msg)->num;
+    }
+
+    return $sum / count($records);
   }
 }

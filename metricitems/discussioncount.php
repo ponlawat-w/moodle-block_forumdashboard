@@ -2,12 +2,12 @@
 
 namespace block_forumdashboard\metricitems;
 
-class replycount extends postcountbase {
+class discussioncount extends postcountbase {
 
-  public static $itemname = 'replycount';
-  public static $nameidentifier = 'item_replycount';
-  public static $valueidentifier = 'identifier_replycount';
-  public static $default_bgcolor = '#c21155';
+  public static $itemname = 'discussioncount';
+  public static $nameidentifier = 'item_discussioncount';
+  public static $valueidentifier = 'identifier_discussioncount';
+  public static $default_bgcolor = '#f58442';
   public static $default_textcolor = '#ffffff';
 
   protected static function getadditionaljoins() {
@@ -19,7 +19,7 @@ class replycount extends postcountbase {
   }
 
   protected static function getadditionalconditions() {
-    return ['posts.parent > 0'];
+    return ['posts.parent = 0'];
   }
 
   protected static function getadditionalparameters() {

@@ -11,10 +11,31 @@ class wordcount extends metricitem {
   public static $default_textcolor = '#ffffff';
 
   public function get_value($scope, $userid) {
-    return 0;
+    global $DB;
+
+    $record = $scope ?
+      $DB->get_record_sql('select group_concat(posts.message) msg from {forum_posts} posts ' .
+        'join {forum_discussions} discussions on posts.discussion = discussions.id '  .
+        'group by posts.userid having userid = ?', [$userid])
+      : $DB->get_record_sql('select group_concat(message) msg from {forum_posts} group by userid having userid = ?', [$userid]);
+
+    return count_words($record->msg);
   }
 
   public function get_average($scope) {
-    return 0;
+    global $DB;
+
+    $records = $scope ?
+      $DB->get_records_sql('select group_concat(posts.message) msg from {forum_posts} posts ' .
+        'join {forum_discussions} discussions on posts.discussion = discussions.id group by posts.userid')
+      : $DB->get_records_sql('select group_concat(message) msg from {forum_posts} group by userid');
+
+    $sum = 0;
+
+    foreach ($records as $record) {
+      $sum += count_words($record->msg);
+    }
+
+    return $sum / count($records);
   }
 }
