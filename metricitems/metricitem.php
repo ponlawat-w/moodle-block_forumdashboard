@@ -57,7 +57,8 @@ abstract class metricitem {
 
   public function get_averagetext($averagevalue) {
     $identifier = $averagevalue == 1 ? static::$averagevalueidentifier : static::$averagevalueidentifier_plural;
-    return get_string($identifier, 'block_forumdashboard', html_writer::tag('span', $averagevalue, ['class' => 'block_forumdashboard_valuenumber']));
+    $numbertext = number_format($averagevalue, 2, get_string('decsep', 'langconfig'), get_string('thousandssep', 'langconfig'));
+    return get_string($identifier, 'block_forumdashboard', html_writer::tag('span', $numbertext, ['class' => 'block_forumdashboard_valuenumber']));
   }
 
   public function renderinitial() {
