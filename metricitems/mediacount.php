@@ -18,7 +18,7 @@ class mediacount extends metricitem {
     $record = $scope ?
       $DB->get_record_sql('select group_concat(posts.message) msg from {forum_posts} posts ' .
         'join {forum_discussions} discussions on posts.discussion = discussions.id '  .
-        'group by posts.userid having userid = ?', [$userid])
+        'where discussions.course = ? group by posts.userid having userid = ?', [$scope, $userid])
       : $DB->get_record_sql('select group_concat(message) msg from {forum_posts} group by userid having userid = ?', [$userid]);
 
     $mediacount = report_discussion_metrics_get_mulutimedia_num($record->msg);
@@ -30,7 +30,7 @@ class mediacount extends metricitem {
 
     $records = $scope ?
       $DB->get_records_sql('select group_concat(posts.message) msg from {forum_posts} posts ' .
-        'join {forum_discussions} discussions on posts.discussion = discussions.id group by posts.userid')
+        'join {forum_discussions} discussions on posts.discussion = discussions.id where discussions.course = ? group by posts.userid', [$scope])
       : $DB->get_records_sql('select group_concat(message) msg from {forum_posts} group by userid');
 
     $sum = 0;
