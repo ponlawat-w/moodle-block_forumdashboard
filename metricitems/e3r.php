@@ -2,7 +2,7 @@
 
 namespace block_forumdashboard\metricitems;
 
-class e3r extends postcountbase {
+class e3r extends engagement {
 
   public static $itemname = 'e3r';
   public static $nameidentifier = 'item_e3r';
@@ -10,23 +10,11 @@ class e3r extends postcountbase {
   public static $default_bgcolor = '#95ed3b';
   public static $default_textcolor = '#000000';
 
-  protected static function getadditionaljoins() {
-    return [
-      'JOIN {forum_posts} parentposts1 ON posts.parent = parentposts1.id',
-      'JOIN {forum_posts} parentposts2 ON parentposts1.parent = parentposts2.id',
-      'JOIN {forum_posts} parentposts3 ON parentposts2.parent = parentposts3.id AND parentposts3.parent = 0'
-    ];
-  }
-  
-  protected static function getadditionaljoinparameters() {
-    return [];
+  public function get_value($scope, $userid) {
+    return static::getlevel($scope, $userid, 2);
   }
 
-  protected static function getadditionalconditions() {
-    return [];
-  }
-
-  protected static function getadditionalparameters() {
-    return [];
+  public function get_average($scope) {
+    return static::getlevelaverage($scope, 2);
   }
 }
