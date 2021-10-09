@@ -4,6 +4,7 @@ include_once(__DIR__ . '/metricitem.php');
 
 include_once(__DIR__ . '/engagement.php');
 include_once(__DIR__ . '/postcountbase.php');
+include_once(__DIR__ . '/textbase.php');
 
 const BLOCK_FORUMDASHBOARD_METRICITEMS = [
   'discussioncount',

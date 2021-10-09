@@ -4,11 +4,11 @@ namespace block_forumdashboard\metricitems;
 
 class discussioncount extends postcountbase {
 
-  public static $itemname = 'discussioncount';
-  public static $nameidentifier = 'item_discussioncount';
-  public static $valueidentifier = 'identifier_discussioncount';
-  public static $default_bgcolor = '#f58442';
-  public static $default_textcolor = '#ffffff';
+  public $itemname = 'discussioncount';
+  public $nameidentifier = 'item_discussioncount';
+  public $valueidentifier = 'identifier_discussioncount';
+  public $default_bgcolor = '#f58442';
+  public $default_textcolor = '#ffffff';
 
   protected static function getadditionaljoins() {
     return [];

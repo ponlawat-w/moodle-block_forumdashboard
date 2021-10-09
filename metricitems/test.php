@@ -4,11 +4,11 @@ namespace block_forumdashboard\metricitems;
 
 class test extends metricitem {
 
-  public static $itemname = 'test';
-  public static $nameidentifier = 'item_test';
-  public static $valueidentifier = 'identifier_test';
-  public static $default_bgcolor = '#ff0000';
-  public static $default_textcolor = '#ffffff';
+  public $itemname = 'test';
+  public $nameidentifier = 'item_test';
+  public $valueidentifier = 'identifier_test';
+  public $default_bgcolor = '#ff0000';
+  public $default_textcolor = '#ffffff';
 
   public function get_value($scope, $userid) {
     return 0;

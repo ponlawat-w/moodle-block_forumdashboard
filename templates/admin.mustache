@@ -18,16 +18,24 @@
         <td class="block_forumdashboard_nametd">
         </td>
         <td class="block_forumdashboard_settingstd">
-          <label>
-            <input type="checkbox" data-type="bool" data-target="initial">
-            {{#str}}initial, block_forumdashboard{{/str}}
-          </label>
-          <label>
-            <input type="checkbox" data-type="bool" data-target="showaverage">
-            {{#str}}average, block_forumdashboard{{/str}}
-          </label>
-          <input type="text" data-type="text" data-target="bgcolor" class="form-control d-inline-block" style="width: 7em;" placeholder="{{#str}}bgcolor, block_forumdashboard{{/str}}">
-          <input type="text" data-type="text" data-target="textcolor" class="form-control d-inline-block" style="width: 7em;" placeholder="{{#str}}textcolor, block_forumdashboard{{/str}}">
+          <div style="display: inline-block;">
+            <label>
+              <input type="checkbox" data-type="bool" data-target="initial">
+              {{#str}}initial, block_forumdashboard{{/str}}
+            </label>
+            <label>
+              <input type="checkbox" data-type="bool" data-target="showaverage">
+              {{#str}}average, block_forumdashboard{{/str}}
+            </label>
+            <label>
+              <input type="checkbox" data-type="bool" data-target="caching">
+              {{#str}}caching, block_forumdashboard{{/str}}
+            </label>
+          </div>
+          <div style="display: inline-block;">
+            <input type="text" data-type="text" data-target="bgcolor" class="form-control d-inline-block" style="width: 7em;" placeholder="{{#str}}bgcolor, block_forumdashboard{{/str}}">
+            <input type="text" data-type="text" data-target="textcolor" class="form-control d-inline-block" style="width: 7em;" placeholder="{{#str}}textcolor, block_forumdashboard{{/str}}">
+          </div>
         </td>
         <td class="block_forumdashboard_actiontd">
           <a href="javascript:void(0);" class="block_forumdashboard_actionbtn" data-action="moveup"><i class="fa fa-arrow-up"></i></a>
@@ -53,6 +61,10 @@
         <label>
           <input type="checkbox" id="block_forumdashboard_newshowaverage">
           {{#str}}average, block_forumdashboard{{/str}}
+        </label>
+        <label>
+          <input type="checkbox" id="block_forumdashboard_newcaching">
+          {{#str}}caching, block_forumdashboard{{/str}}
         </label>
       </div>
       <div>

@@ -1,5 +1,7 @@
 <?php
 
+include_once(__DIR__ . '/metricitems/entry.php');
+
 function block_forumdashboard_getiteminstance($itemid) {
   $config = get_config('block_forumdashboard');
   if (!isset($config->metricitems)) {
@@ -14,6 +16,77 @@ function block_forumdashboard_getiteminstance($itemid) {
   }
 
   return null;
+}
+
+function block_forumdashboard_getiteminstances() {
+  $items = [];
+  $config = get_config('block_forumdashboard');
+  $iteminstances = $config && isset($config->metricitems) ? json_decode($config->metricitems) : [];
+
+  foreach ($iteminstances as $iteminstance) {
+    $class = '\\block_forumdashboard\\metricitems\\' . $iteminstance->item;
+    array_push($items, new $class($iteminstance));
+  }
+
+  return $items;
+}
+
+function block_forumdashboard_executecron($verbose = true) {
+  global $DB;
+
+  $DB->delete_records('block_forumdashboard_caches', []);
+
+  $courses = get_courses();
+  $courseids = array_merge([0], array_map(function($course) { return $course->id; }, $courses));
+
+  $items = block_forumdashboard_getiteminstances();
+
+  foreach ($courseids as $courseid) {
+    $verbose && mtrace("...... Executing course ID: {$courseid}...");
+    $users = $courseid ? get_enrolled_users(context_course::instance($courseid)) : $DB->get_records('user');
+    $itemcount = 0;
+    foreach ($items as $item) {
+      if ($courseid == 0 && !$item->globalsensitive) {
+        continue;
+      }
+      foreach ($users as $user) {
+        $record = new stdClass();
+        $record->id = 0;
+        $record->itemid = $item->itemid;
+        $record->course = $courseid;
+        $record->userid = $user->id;
+        $record->calculated = time();
+        $record->value = $item->get_value($courseid, $user->id);
+        $DB->insert_record('block_forumdashboard_caches', $record);
+      }
+      $itemcount++;
+    }
+    $verbose && mtrace('......... ' . count($users) . ' user(s) and ' . $itemcount . ' metric items.');
+  }
+
+  $verbose && mtrace('...... Done');
+
+  set_config('lastcalculated', time(), 'block_forumdashboard');
+  return true;
+}
+
+function block_forumdashboard_getnextcronschedule() {
+  $config = get_config('block_forumdashboard');
+  $lastcalculated = $config && isset($config->lastcalculated) ? $config->lastcalculated : 0;
+  $times = array_filter(explode(',', $config && isset($config->cachingtime) ? $config->cachingtime : ''), function($x) {return is_numeric($x) && $x >= 0 && $x <= 23;});
+  if (!count($times)) {
+    return null;
+  }
+  sort($times, SORT_NUMERIC);
+
+  foreach ($times as $time) {
+    $schduletime = mktime($time, 0, 0);
+    if ($lastcalculated < $schduletime) {
+      return $schduletime;
+    }
+  }
+
+  return mktime($times[0] + 24, 0, 0);
 }
 
 function report_discussion_metrics_get_mulutimedia_num($text) {

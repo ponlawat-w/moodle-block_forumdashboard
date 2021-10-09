@@ -4,11 +4,11 @@ namespace block_forumdashboard\metricitems;
 
 class postcount extends postcountbase {
   
-  public static $itemname = 'postcount';
-  public static $nameidentifier = 'item_postcount';
-  public static $valueidentifier = 'identifier_postcount';
-  public static $default_bgcolor = '#11a7c2';
-  public static $default_textcolor = '#ffffff';
+  public $itemname = 'postcount';
+  public $nameidentifier = 'item_postcount';
+  public $valueidentifier = 'identifier_postcount';
+  public $default_bgcolor = '#11a7c2';
+  public $default_textcolor = '#ffffff';
 
   protected static function getadditionaljoins() {
     return [];

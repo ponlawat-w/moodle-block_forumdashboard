@@ -6,16 +6,20 @@ use context_course;
 
 class participantcount extends metricitem {
   
-  public static $itemname = 'participantcount';
-  public static $nameidentifier = 'item_participantcount';
-  public static $valueidentifier = 'identifier_participantcount';
-  public static $default_bgcolor = '#3bad6e';
-  public static $default_textcolor = '#000000';
+  public $itemname = 'participantcount';
+  public $nameidentifier = 'item_participantcount';
+  public $valueidentifier = 'identifier_participantcount';
+  public $default_bgcolor = '#3bad6e';
+  public $default_textcolor = '#000000';
+  public $globalsensitive = true;
 
   public function get_value($scope, $userid) {
     global $DB;
 
     $discussionids = array_map(function ($discussion) { return $discussion->id; }, $DB->get_records('forum_discussions', $scope ? ['course' => $scope] : []));
+    if (!count($discussionids)) {
+      return 0;
+    }
     list($discsin, $discsparam) = $DB->get_in_or_equal($discussionids);
     $discswhere = 'userid != ? and discussion ' . $discsin;
 

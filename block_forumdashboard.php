@@ -2,7 +2,6 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-include_once(__DIR__ . '/metricitems/entry.php');
 include_once(__DIR__ . '/lib.php');
 
 class block_forumdashboard extends block_base {
@@ -11,18 +10,13 @@ class block_forumdashboard extends block_base {
   public function __construct() {
     parent::__construct();
 
-    $config = get_config('block_forumdashboard');
-    $iteminstances = $config && isset($config->metricitems) ? json_decode($config->metricitems) : [];
-
-    foreach ($iteminstances as $iteminstance) {
-      $class = '\\block_forumdashboard\\metricitems\\' . $iteminstance->item;
-      array_push($this->items, new $class($iteminstance));
-    }
+    $this->items = block_forumdashboard_getiteminstances();
   }
 
   public function init() {
     $this->title = get_string('blocktitle', 'block_forumdashboard');
     $this->version = 2021092403;
+    $this->config = get_config('block_forumdashboard');
   }
 
   public function has_config() {

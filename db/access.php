@@ -14,5 +14,13 @@ $capabilities = [
     'archetypes' => [
       'manager' => CAP_ALLOW
     ]
+  ],
+  'block/forumdashboard:runupdatecaches' => [
+    'riskbitmask' => RISK_CONFIG,
+    'captype' => 'write',
+    'contextlevel' => CONTEXT_SYSTEM,
+    'archetypes' => [
+      'manager' => CAP_ALLOW
+    ]
   ]
 ];

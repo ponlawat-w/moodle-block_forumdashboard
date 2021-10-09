@@ -1,9 +1,18 @@
 <?php
 
 include_once(__DIR__ . '/../../config.php');
-include_once(__DIR__ . '/metricitems/entry.php');
+include_once(__DIR__ . '/lib.php');
 
 require_login();
+
+$action = optional_param('action', 'configmetircitems', PARAM_TEXT);
+if ($action == 'updatecaches') {
+  require_capability('block/forumdashboard:runupdatecaches', context_system::instance());
+  block_forumdashboard_executecron(false);
+  redirect(new moodle_url('/admin/settings.php', ['section' => 'blocksettingforumdashboard']));
+  exit;
+}
+
 require_capability('block/forumdashboard:configmetricitems', context_system::instance());
 
 if (optional_param('block_forumdashboard_action', null, PARAM_TEXT) === 'submit') {
@@ -32,12 +41,15 @@ $PAGE->navbar
 
 $metricitems = [];
 foreach (block_forumdashboard_getclasses() as $class) {
+  $immediateconfig = new stdClass();
+  $immediateconfig->id = '';
+  $immediateclassinstance = new $class($immediateconfig);
   array_push($metricitems, [
-    'name' => $class::$itemname,
-    'nameidentifier' => $class::$nameidentifier,
-    'default_bgcolor' => $class::$default_bgcolor,
-    'default_textcolor' => $class::$default_textcolor,
-    'namestr' => get_string($class::$nameidentifier, 'block_forumdashboard')
+    'name' => $immediateclassinstance->itemname,
+    'nameidentifier' => $immediateclassinstance->nameidentifier,
+    'default_bgcolor' => $immediateclassinstance->default_bgcolor,
+    'default_textcolor' => $immediateclassinstance->default_textcolor,
+    'namestr' => get_string($immediateclassinstance->nameidentifier, 'block_forumdashboard')
   ]);
 }
 

@@ -5,6 +5,7 @@ require(['jquery'], $ => {
     const $newitem = $('#block_forumdashboard_newitem');
     const $newinitial = $('#block_forumdashboard_newinitial');
     const $newshowaverage = $('#block_forumdashboard_newshowaverage');
+    const $newcaching = $('#block_forumdashboard_newcaching');
     const $addbtn = $('#block_forumdashboard_addbtn');
     const metricItems = JSON.parse($('#block_forumdashboard_metricitems').val());
     const metricItemInstances = JSON.parse($data.val());
@@ -78,6 +79,7 @@ require(['jquery'], $ => {
           .css('color', instance.textcolor ? instance.textcolor : getMetricItemProperty(instance.item, 'default_textcolor'));
         $tr.find('input[data-target=initial]').prop('checked', instance.initial ? true : false);
         $tr.find('input[data-target=showaverage]').prop('checked', instance.showaverage ? true : false);
+        $tr.find('input[data-target=caching]').prop('checked', instance.caching ? true : false);
         $tr.find('input[data-target=bgcolor]').val(instance.bgcolor);
         $tr.find('input[data-target=textcolor]').val(instance.textcolor);
 
@@ -115,7 +117,8 @@ require(['jquery'], $ => {
         id: getid(item),
         item: item,
         initial: $newinitial.prop('checked'),
-        showaverage: $newshowaverage.prop('checked')
+        showaverage: $newshowaverage.prop('checked'),
+        caching: $newcaching.prop('checked')
       });
       update();
     });

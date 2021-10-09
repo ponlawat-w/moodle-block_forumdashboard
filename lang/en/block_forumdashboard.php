@@ -4,6 +4,12 @@ $string['loading'] = 'Loading…';
 $string['configmetricitems'] = 'Configure metric items';
 $string['clicktoconfigmetricitems'] = 'Click here to configure metric items';
 
+$string['forumdashboard:myaddinstance'] = 'Add an instance';
+$string['forumdashboard:configmetricitems'] = 'Configure metric items';
+$string['forumdashboard:runupdatecaches'] = 'Run update caches manually';
+
+$string['calculate_task'] = 'Calculation Caching Task';
+
 $string['blocktitle'] = 'Forum Dashboard';
 $string['viewsummaryof'] = 'View summary of: ';
 $string['entiresite'] = 'Entire Site';
@@ -12,11 +18,20 @@ $string['viewmore'] = 'View more…';
 
 $string['initial'] = 'Initial display';
 $string['average'] = 'Include average';
+$string['caching'] = 'Caching value';
 $string['bgcolor'] = 'Background color';
 $string['textcolor'] = 'Text color';
 $string['addmetricitem'] = 'Add a new item';
 
 $string['identifier_averagedefault'] = 'Average: {$a}';
+$string['notavailable'] = 'Data not available';
+$string['now'] = 'now';
+$string['lastupdated'] = '<strong>Last updated:</strong> {$a}';
+$string['nextschedule'] = '<strong>Next schedule:</strong> {$a}';
+$string['cachingschedule'] = 'Caching schedule';
+$string['cachingtime'] = 'Caching time of the day';
+$string['cachingtime_description'] = 'Caching time of the day (separated with comma) For example "7,19" will be 07:00 and 19:00<br>※ at server time';
+$string['updatecaches'] = 'Click here to update caches now';
 
 $string['confirmremove'] = 'Are you sure you want to remove this item?';
 $string['item_discussioncount'] = 'Discussion count';

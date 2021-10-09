@@ -5,6 +5,19 @@ namespace block_forumdashboard\metricitems;
 use context_course;
 
 abstract class engagement extends metricitem {
+  protected static $CRON_CACHES = [];
+
+  protected function getcronlevels($scope, $userid) {
+    if (!isset(static::$CRON_CACHES[$scope])) {
+      static::$CRON_CACHES[$scope] = [];
+    }
+    if (!isset(static::$CRON_CACHES[$scope][$userid])) {
+      static::$CRON_CACHES[$scope][$userid] = static::getlevels($scope, $userid);
+    }
+
+    return static::$CRON_CACHES[$scope][$userid];
+  }
+
   protected static function getlevels($scope, $userid) {
     global $DB;
     $posts = $scope ?
