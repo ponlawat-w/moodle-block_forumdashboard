@@ -1,7 +1,7 @@
 {{!
   @template block_forumdashboard/block
 }}
-<div class="container-fluid block_forumdashboard_block">
+<div class="container-fluid block_forumdashboard_block" id="forumdashboard-{{instanceid}}">
   <div class="row">
     <label>
       {{#str}} viewsummaryof, block_forumdashboard {{/str}}
@@ -11,6 +11,32 @@
       </select>
     </label>
   </div>
+  {{#hasnotifications}}
+  <div class="row block_forumdashboard_notifications">
+    <div class="container-fluid">
+      <div class="card">
+        <div class="card-body">
+          <div class="mb-4">
+            <div class="float-right">
+              <a href="{{{dismissallurl}}}"><i class="fa fa-times"></i> {{#str}} dismissall, block_forumdashboard {{/str}}</a>
+            </div>
+            <h3 class="text-danger"><i class="fa fa-bell"></i> {{#str}}notifications{{/str}}</h3>
+          </div>
+          <div style="max-height: 250px; overflow-y: auto;">
+            {{#notifications}}
+              <div class="alert alert-primary block_forumdashboard_notification" data-course="{{course}}">
+                <a href="{{{url}}}">{{subject}}</a>
+                <span class="float-right">
+                  <a href="{{{dismissurl}}}"><i class="fa fa-times"></i></a>
+                </span>
+              </div>
+            {{/notifications}}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {{/hasnotifications}}
   <div class="row">
     {{{content}}}
   </div>

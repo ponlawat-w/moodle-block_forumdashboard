@@ -6,6 +6,7 @@ require(['jquery'], $ => {
     const $hiddenlivemetricitems = $block.find('.block_forumdashboard_metricitem[data-initial!=1][data-caching!=1]');
     const $hiddenmetricitems = $block.find('.block_forumdashboard_metricitem[data-initial!=1]');
     const $lastupdated = $block.find('.block_forumdashboard_lastupdated');
+    const $notifications = $block.find('.block_forumdashboard_notifications');
     let expanded = false;
 
     const resetcontent = () => {
@@ -16,6 +17,22 @@ require(['jquery'], $ => {
         loadliveitems($hiddenlivemetricitems);
       }
       loadcachingitems();
+    };
+
+    const updatenotifications = () => {
+      const courseid = $scopeselect.val();
+      if (parseInt(courseid) > 0) {
+        $notifications.find(`.block_forumdashboard_notification[data-course!=${courseid}]`).hide();
+        $notifications.find(`.block_forumdashboard_notification[data-course=${courseid}]`).show();
+      } else {
+        $notifications.find('.block_forumdashboard_notification').show();
+      }
+
+      $notifications.show();
+      const $shownnotifications = $notifications.find('.block_forumdashboard_notification:visible');
+      if (!$shownnotifications.length) {
+        $notifications.hide();
+      }
     };
 
     const applyresponseitem = ($item, responseitem) => {
@@ -93,6 +110,7 @@ require(['jquery'], $ => {
 
     $scopeselect.change(() => {
       resetcontent();
+      updatenotifications();
     });
 
     $hiddenmetricitems.hide();

@@ -7,6 +7,7 @@ $string['clicktoconfigmetricitems'] = 'Click here to configure metric items';
 $string['forumdashboard:myaddinstance'] = 'Add an instance';
 $string['forumdashboard:configmetricitems'] = 'Configure metric items';
 $string['forumdashboard:runupdatecaches'] = 'Run update caches manually';
+$string['messageprovider:newreply'] = 'Notification of new reply';
 
 $string['calculate_task'] = 'Calculation Caching Task';
 
@@ -15,6 +16,7 @@ $string['viewsummaryof'] = 'View summary of: ';
 $string['entiresite'] = 'Entire Site';
 $string['viewcourse'] = 'Course: {$a}';
 $string['viewmore'] = 'View more…';
+$string['dismissall'] = 'Dismiss all';
 
 $string['initial'] = 'Initial display';
 $string['average'] = 'Include average';
@@ -32,6 +34,8 @@ $string['cachingschedule'] = 'Caching schedule';
 $string['cachingtime'] = 'Caching time of the day';
 $string['cachingtime_description'] = 'Caching time of the day (separated with comma) For example "7,19" will be 07:00 and 19:00<br>※ at server time';
 $string['updatecaches'] = 'Click here to update caches now';
+$string['replynotifications'] = 'Enable reply notifications';
+$string['replynotifications_description'] = 'If checked, notifications of recent replies to the user will be sent and shown in dashboard';
 
 $string['confirmremove'] = 'Are you sure you want to remove this item?';
 $string['item_discussioncount'] = 'Discussion count';
@@ -66,3 +70,7 @@ $string['identifier_test'] = 'Test';
 $string['item_wordcount'] = 'Words count';
 $string['identifier_wordcount'] = '{$a} word';
 $string['identifier_wordcount_plural'] = '{$a} words';
+
+$string['notification_newreply'] = 'New reply to your post';
+$string['notification_newreplyin'] = 'New reply from {$a->fromuser} to your message in: {$a->discussionname}';
+$string['notification_linktopost'] = 'Post';

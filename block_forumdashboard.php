@@ -49,7 +49,7 @@ class block_forumdashboard extends block_base {
 
   private function get_courses() {
     $courses = [];
-    $mycourses = enrol_get_my_courses();
+    $mycourses = enrol_get_my_courses(null, 'fullname');
     foreach ($mycourses as $mycourse) {
       array_push($courses, [
         'id' => $mycourse->id,
@@ -70,17 +70,44 @@ class block_forumdashboard extends block_base {
     return false;
   }
 
+  private function get_notifications($returnurl) {
+    global $PAGE;
+
+    $notifications = block_forumdashboard_getmynotifications();
+    $results = [];
+    foreach ($notifications as $notification) {
+      $results[] = [
+        'subject' => $notification->subject,
+        'url' => new moodle_url('/message/output/popup/mark_notification_read.php', ['notificationid' => $notification->id]),
+        'course' => $notification->customdata,
+        'dismissurl' => new moodle_url('/blocks/forumdashboard/notification_dismiss.php', ['id' => $notification->id, 'return' => $returnurl])
+      ];
+    }
+
+    return $results;
+  }
+
   public function get_content() {
     global $OUTPUT, $PAGE;
+
+    $instanceid = $this->context->instanceid;
+    $returnurl = new moodle_url($PAGE->url, $_GET, 'forumdashboard-' . $instanceid);
+    $dismissallurl = new moodle_url('/blocks/forumdashboard/notification_dismiss.php', ['id' => 'all', 'return' => $returnurl]);
 
     $PAGE->requires->jquery();
     $PAGE->requires->js(new moodle_url('/blocks/forumdashboard/script.js'));
 
+    $notifications = $this->config && isset($this->config->replynotifications) && $this->config->replynotifications ? $this->get_notifications($returnurl) : [];
+
     $this->content = new stdClass();
     $this->content->text = $OUTPUT->render_from_template('block_forumdashboard/block', [
+      'instanceid' => $instanceid,
       'content' => $this->get_items_content(),
       'courses' => $this->get_courses(),
-      'expandable' => $this->expandable()
+      'expandable' => $this->expandable(),
+      'notifications' => $notifications,
+      'hasnotifications' => count($notifications) > 0,
+      'dismissallurl' => $dismissallurl
     ]);
 
     return $this->content;

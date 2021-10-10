@@ -89,6 +89,40 @@ function block_forumdashboard_getnextcronschedule() {
   return mktime($times[0] + 24, 0, 0);
 }
 
+function block_forumdashboard_notifyuser($post, $posttonotify) {
+  global $DB;
+  $stringmanager = get_string_manager();
+  $discussion = $DB->get_record('forum_discussions', ['id' => $post->discussion]);
+  $fromuser = core_user::get_user($post->userid);
+  $targetuser = core_user::get_user($posttonotify->userid);
+  $targetlang = $targetuser->lang;
+  $url = new moodle_url('/mod/forum/discuss.php', ['d' => $discussion->id], 'p' . $post->id);
+
+  $message = new \core\message\message();
+  $message->component = 'block_forumdashboard';
+  $message->name = 'newreply';
+  $message->userfrom = core_user::get_user($post->userid);
+  $message->userto = $targetuser;
+  $subjectstrdata = new stdClass();
+  $subjectstrdata->fromuser = fullname($fromuser);
+  $subjectstrdata->discussionname = $discussion->name;
+  $message->subject = $stringmanager->get_string('notification_newreplyin', 'block_forumdashboard', $subjectstrdata, $targetlang);
+  $message->fullmessage = $message->subject;
+  $message->fullmessageformat = FORMAT_HTML;
+  $message->fullmessagehtml = html_writer::link($url, $post->subject);
+  $message->smallmessage = $stringmanager->get_string('notification_newreply', 'block_forumdashboard', null, $targetlang);
+  $message->notification = 1;
+  $message->contexturl = $url;
+  $message->contexturlname = $stringmanager->get_string('notification_linktopost', 'block_forumdashboard', null, $targetlang);
+  $message->customdata = intval($discussion->course);
+  message_send($message);
+}
+
+function block_forumdashboard_getmynotifications() {
+  global $USER, $DB;
+  return $DB->get_records('notifications', ['component' => 'block_forumdashboard', 'useridto' => $USER->id, 'timeread' => NULL], 'timecreated desc');
+}
+
 function report_discussion_metrics_get_mulutimedia_num($text) {
   global $CFG, $PAGE;
 

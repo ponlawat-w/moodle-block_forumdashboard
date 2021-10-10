@@ -41,4 +41,13 @@ if ($ADMIN->fulltree) {
       '7,19', PARAM_TEXT
     )
   );
+
+  $settings->add(
+    new admin_setting_configcheckbox(
+      'block_forumdashboard/replynotifications',
+      get_string('replynotifications', 'block_forumdashboard'),
+      get_string('replynotifications_description', 'block_forumdashboard'),
+      '1', '1', '0'
+    )
+  );
 }
