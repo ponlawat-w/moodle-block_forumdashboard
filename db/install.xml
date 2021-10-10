@@ -7,7 +7,7 @@
     <TABLE NAME="block_forumdashboard_caches" COMMENT="Calculation cache">
       <FIELDS>
         <FIELD NAME="id" LENGTH="11" SEQUENCE="true" TYPE="int" NOTNULL="true"/>
-        <FIELD NAME="itemid" SEQUENCE="false" TYPE="char" NOTNULL="true" LENGTH="50" DEFAULT="" />
+        <FIELD NAME="itemid" SEQUENCE="false" TYPE="char" NOTNULL="true" LENGTH="50" />
         <FIELD NAME="course" SEQUENCE="false" TYPE="int" NOTNULL="true" LENGTH="11"/>
         <FIELD NAME="userid" LENGTH="11" SEQUENCE="false" TYPE="int" NOTNULL="false" DEFAULT="0"/>
         <FIELD NAME="calculated" LENGTH="11" SEQUENCE="false" TYPE="int" NOTNULL="false" DEFAULT="0"/>
