@@ -1,24 +1,21 @@
 {{!
-  @template block_forumdashboard/metricitem
+@template block_forumdashboard/metricitem
 }}
-<div class="col-12 col-md-6 col-lg-3 block_forumdashboard_metricitem"
-  data-itemid="{{itemid}}"
-  data-hasaverage="{{#showaverage}}1{{/showaverage}}"
-  data-initial="{{#initial}}1{{/initial}}"
-  data-caching="{{#caching}}1{{/caching}}"
->
-  <div class="container p-3 my-2" style="min-height: 8em; background-color: {{bgcolor}}; color: {{textcolor}};">
-    <div class="block_forumdashboard_metricitem_loading">
-      {{> core/loading}}
-      {{#str}}loading, block_forumdashboard{{/str}}
+<div class="col-12 col-md-6 col-lg-3 block_forumdashboard_metricitem" data-itemid="{{itemid}}"
+    data-hasaverage="{{#showaverage}}1{{/showaverage}}" data-initial="{{#initial}}1{{/initial}}"
+    data-caching="{{#caching}}1{{/caching}}">
+    <div class="container p-3 my-2" style="min-height: 8em; background-color: {{bgcolor}}; color: {{textcolor}};">
+        <div class="block_forumdashboard_metricitem_loading">
+            {{> core/loading}}
+            {{#str}}loading, block_forumdashboard{{/str}}
+        </div>
+        <div class="block_forumdashboard_metricitem_notavailable" style="display: none;">
+            <i class="fa fa-exclamation-triangle"></i>
+            {{#str}}notavailable, block_forumdashboard{{/str}}
+        </div>
+        <div class="block_forumdashboard_metricitem_content" style="display: none;">
+            <div class="block_forumdashboard_metricitem_content_value"></div>
+            {{#showaverage}}<div class="block_forumdashboard_metricitem_content_average"></div>{{/showaverage}}
+        </div>
     </div>
-    <div class="block_forumdashboard_metricitem_notavailable" style="display: none;">
-      <i class="fa fa-exclamation-triangle"></i>
-      {{#str}}notavailable, block_forumdashboard{{/str}}
-    </div>
-    <div class="block_forumdashboard_metricitem_content" style="display: none;">
-      <div class="block_forumdashboard_metricitem_content_value"></div>
-      {{#showaverage}}<div class="block_forumdashboard_metricitem_content_average"></div>{{/showaverage}}
-    </div>
-  </div>
 </div>

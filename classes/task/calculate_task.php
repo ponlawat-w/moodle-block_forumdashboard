@@ -1,28 +1,63 @@
 <?php
+// This file is part of Moodle - https://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
+
 
 namespace block_forumdashboard\task;
 
 include_once(__DIR__ . '/../../lib.php');
 
-class calculate_task extends \core\task\scheduled_task {
-  public function get_name() {
-    return get_string('calculate_task', 'block_forumdashboard');
-  }
-
-  public function execute() {
-    $scheduletime = block_forumdashboard_getnextcronschedule();
-
-    if (!$scheduletime) {
-      mtrace('...... No schedule');
-      return true;
+/**
+ * Cron task
+ * 
+ * @package block_forumdashboard
+ * @copyright 2022 Ponlawat Weerapanpisit
+ * @license https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+class calculate_task extends \core\task\scheduled_task
+{
+    /**
+     * Get task name
+     *
+     * @return string
+     */
+    public function get_name()
+    {
+        return get_string('calculate_task', 'block_forumdashboard');
     }
 
-    if (time() >= $scheduletime) {
-      block_forumdashboard_executecron(true);
-    } else {
-      mtrace('...... Skipped');
-    }
+    /**
+     * Execute when scheduled
+     *
+     * @return bool
+     */
+    public function execute()
+    {
+        $scheduletime = block_forumdashboard_getnextcronschedule();
 
-    return true;
-  }
+        if (!$scheduletime) {
+            mtrace('...... No schedule');
+            return true;
+        }
+
+        if (time() >= $scheduletime) {
+            block_forumdashboard_executecron(true);
+        } else {
+            mtrace('...... Skipped');
+        }
+
+        return true;
+    }
 }
