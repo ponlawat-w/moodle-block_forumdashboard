@@ -17,7 +17,7 @@
 namespace block_forumdashboard\metricitems;
 
 /**
- * x
+ * Third level engagement
  * 
  * @package block_forumdashboard
  * @copyright 2022 Ponlawat Weerapanpisit
@@ -49,16 +49,6 @@ class e3r extends engagement
      * @var string
      */
     public $default_textcolor = '#000000';
-
-    /**
-     * @param int $scope
-     * @param int $userid
-     * @return int
-     */
-    public function calculatecronvalue($scope, $userid)
-    {
-        return $this->getcronlevels($scope, $userid)[0];
-    }
 
     /**
      * @param int $scope

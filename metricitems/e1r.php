@@ -55,16 +55,6 @@ class e1r extends engagement
      * @param int $userid
      * @return int
      */
-    public function calculatecronvalue($scope, $userid)
-    {
-        return $this->getcronlevels($scope, $userid)[0];
-    }
-
-    /**
-     * @param int $scope
-     * @param int $userid
-     * @return int
-     */
     public function get_value($scope, $userid)
     {
         return static::getlevel($scope, $userid, 0);

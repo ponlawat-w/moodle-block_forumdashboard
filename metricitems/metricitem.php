@@ -154,21 +154,11 @@ abstract class metricitem
     public abstract function get_average($scope);
 
     /**
-     * @param int|null $scope
-     * @param int $userid
-     * @return int
-     */
-    public function calculatecronvalue($scope, $userid)
-    {
-        return $this->get_value($scope, $userid);
-    }
-
-    /**
      * Get value for display, can be from caching or live calculation
      *
      * @param int $scope
      * @param int $userid
-     * @return int
+     * @return int|string
      */
     public function get_displayvalue($scope, $userid)
     {
@@ -179,14 +169,15 @@ abstract class metricitem
                 $DB->get_record_sql('SELECT sum(value) value FROM {block_forumdashboard_caches} WHERE itemid = ? AND userid = ?', [$this->itemid, $userid]);
             return $record ? $record->value : null;
         }
-        return $this->get_value($scope, $userid);
+        $value = $this->get_value($scope, $userid);
+        return is_null($value) ? '-' : $value;
     }
 
     /**
      * Get average value for display, can be from caching or live calculation
      *
      * @param int $scope
-     * @return double
+     * @return double|string
      */
     public function get_displayaverage($scope)
     {
@@ -197,32 +188,42 @@ abstract class metricitem
                 $DB->get_record_sql('SELECT avg(value) averagevalue FROM {block_forumdashboard_caches} WHERE itemid = ?', [$this->itemid]);
             return $record ? $record->averagevalue : 0;
         }
-        return $this->get_average($scope);
+        $average = $this->get_average($scope);
+        return is_null($average) ? '-' : $average;
     }
 
     /**
      * Get stringified value with text
      *
-     * @param int $value
+     * @param int|string $value
      * @return string
      */
     public function get_valuetext($value)
     {
         $identifier = $value == 1 ? $this->valueidentifier : $this->valueidentifier_plural;
-        return get_string($identifier, 'block_forumdashboard', html_writer::tag('span', $value, ['class' => 'block_forumdashboard_valuenumber']));
+        $numbertext = $value == floor($value) ? $value : number_format($value, 2, get_string('decsep', 'langconfig'), get_string('thousandssep', 'langconfig'));
+        return get_string(
+            $identifier,
+            'block_forumdashboard',
+            html_writer::tag('span', $numbertext, ['class' => 'block_forumdashboard_valuenumber'])
+        );
     }
 
     /**
      * Get stringified average value with text
      *
-     * @param int $averagevalue
+     * @param int|string $averagevalue
      * @return string
      */
     public function get_averagetext($averagevalue)
     {
         $identifier = $averagevalue == 1 ? $this->averagevalueidentifier : $this->averagevalueidentifier_plural;
         $numbertext = number_format($averagevalue, 2, get_string('decsep', 'langconfig'), get_string('thousandssep', 'langconfig'));
-        return get_string($identifier, 'block_forumdashboard', html_writer::tag('span', $numbertext, ['class' => 'block_forumdashboard_valuenumber']));
+        return get_string(
+            $identifier,
+            'block_forumdashboard',
+            html_writer::tag('span', $numbertext, ['class' => 'block_forumdashboard_valuenumber'])
+        );
     }
 
     /**

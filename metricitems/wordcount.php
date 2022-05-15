@@ -57,22 +57,6 @@ class wordcount extends textbase
      * @param int $userid
      * @return int
      */
-    public function calculatecronvalue($scope, $userid)
-    {
-        $wordcount = 0;
-        $msgrecords = static::get_cronmessagerecords($scope, $userid);
-        foreach ($msgrecords as $msgrecord) {
-            $wordcount += count_words($msgrecord->message);
-        }
-
-        return $wordcount;
-    }
-
-    /**
-     * @param int $scope
-     * @param int $userid
-     * @return int
-     */
     public function get_value($scope, $userid)
     {
         $wordcount = 0;

@@ -11,7 +11,7 @@
         <FIELD NAME="course" SEQUENCE="false" TYPE="int" NOTNULL="true" LENGTH="11"/>
         <FIELD NAME="userid" LENGTH="11" SEQUENCE="false" TYPE="int" NOTNULL="false" DEFAULT="0"/>
         <FIELD NAME="calculated" LENGTH="11" SEQUENCE="false" TYPE="int" NOTNULL="false" DEFAULT="0"/>
-        <FIELD NAME="value" SEQUENCE="false" TYPE="float" NOTNULL="true" DEFAULT="0"/>
+        <FIELD NAME="value" SEQUENCE="false" TYPE="float" NOTNULL="false" DEFAULT="0"/>
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>

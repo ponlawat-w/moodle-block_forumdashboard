@@ -34,6 +34,8 @@ const BLOCK_FORUMDASHBOARD_METRICITEMS = [
     'e2r',
     'e3r',
     'e4r',
+    'eavg',
+    'emax',
     'mediacount',
     'participantcount',
     'postcount',

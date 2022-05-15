@@ -53,5 +53,13 @@ function xmldb_block_forumdashboard_upgrade($oldversion)
         upgrade_block_savepoint(true, 2021100903, 'forumdashboard');
     }
 
+    if ($oldversion < 2022051500) {
+        $table = new xmldb_table('block_forumdashboard_caches');
+        $field = new xmldb_field('value', XMLDB_TYPE_FLOAT, null, null, null, null, null, 'calculated');
+        $dbmanager->change_field_notnull($table,  $field);
+
+        upgrade_block_savepoint(true, 2022051500, 'forumdashboard');
+    }
+
     return true;
 }

@@ -18,36 +18,34 @@ namespace block_forumdashboard\metricitems;
 
 use context_course;
 
-include_once(__DIR__ . '/../lib.php');
-
 /**
- * Media count
+ * Maximum level of engagement
  * 
  * @package block_forumdashboard
  * @copyright 2022 Ponlawat Weerapanpisit
  * @license https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class mediacount extends textbase
+class emax extends engagement
 {
     /**
      * @var string
      */
-    public $itemname = 'mediacount';
+    public $itemname = 'emax';
 
     /**
      * @var string
      */
-    public $nameidentifier = 'item_mediacount';
+    public $nameidentifier = 'item_emax';
 
     /**
      * @var string
      */
-    public $valueidentifier = 'identifier_mediacount';
+    public $valueidentifier = 'identifier_emax';
 
     /**
      * @var string
      */
-    public $default_bgcolor = '#bfbfbf';
+    public $default_bgcolor = '#c7e327';
 
     /**
      * @var string
@@ -61,14 +59,12 @@ class mediacount extends textbase
      */
     public function get_value($scope, $userid)
     {
-        $mediacount = 0;
-        $msgrecords = static::get_messagerecords($scope, $userid);
-        foreach ($msgrecords as $msgrecord) {
-            $medianumresult = report_discussion_metrics_get_mulutimedia_num($msgrecord->message);
-            $mediacount += ($medianumresult ? $medianumresult->num : 0);
+        for ($i = 3; $i > -1; $i--) {
+            if (static::getlevel($scope, $userid, $i) > 0) {
+                return $i + 1;
+            }
         }
-
-        return $mediacount;
+        return 0;
     }
 
     /**
