@@ -7,9 +7,7 @@
             {{#str}} viewsummaryof, block_forumdashboard {{/str}}
             <select class="block_forumdashboard_scopeselect form-control w-auto d-inline-block">
                 <option value="0">{{#str}} entiresite, block_forumdashboard {{/str}}</option>
-                {{#courses}}<option value="{{id}}">{{#str}} viewcourse, block_forumdashboard, {{fullname}} {{/str}}
-                </option>
-                {{/courses}}
+                {{#courses}}<option value="{{id}}"{{#selected}} selected{{/selected}}>{{#str}} viewcourse, block_forumdashboard, {{fullname}} {{/str}}</option>{{/courses}}
             </select>
         </label>
     </div>

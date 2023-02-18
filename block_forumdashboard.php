@@ -15,7 +15,6 @@ class block_forumdashboard extends block_base {
 
   public function init() {
     $this->title = get_string('blocktitle', 'block_forumdashboard');
-    $this->version = 2021092403;
     $this->config = get_config('block_forumdashboard');
   }
 
@@ -47,13 +46,14 @@ class block_forumdashboard extends block_base {
     return $html;
   }
 
-  private function get_courses() {
+  private function get_courses($recentid) {
     $courses = [];
     $mycourses = enrol_get_my_courses(null, 'fullname');
     foreach ($mycourses as $mycourse) {
       array_push($courses, [
         'id' => $mycourse->id,
-        'fullname' => $mycourse->fullname
+        'fullname' => $mycourse->fullname,
+        'selected' => $recentid == $mycourse->id
       ]);
     }
 
@@ -88,7 +88,7 @@ class block_forumdashboard extends block_base {
   }
 
   public function get_content() {
-    global $OUTPUT, $PAGE;
+    global $OUTPUT, $PAGE, $USER;
 
     $instanceid = $this->context->instanceid;
     $returnurl = new moodle_url($PAGE->url, $_GET, 'forumdashboard-' . $instanceid);
@@ -99,11 +99,14 @@ class block_forumdashboard extends block_base {
 
     $notifications = $this->config && isset($this->config->replynotifications) && $this->config->replynotifications ? $this->get_notifications($returnurl) : [];
 
+    $recentcourses = array_values(course_get_recent_courses($USER->id, 1));
+    $recentcourseid = count($recentcourses) ? $recentcourses[0]->id : 0;
+
     $this->content = new stdClass();
     $this->content->text = $OUTPUT->render_from_template('block_forumdashboard/block', [
       'instanceid' => $instanceid,
       'content' => $this->get_items_content(),
-      'courses' => $this->get_courses(),
+      'courses' => $this->get_courses($recentcourseid),
       'expandable' => $this->expandable(),
       'notifications' => $notifications,
       'hasnotifications' => count($notifications) > 0,
