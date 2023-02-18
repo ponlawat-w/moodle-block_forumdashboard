@@ -17,6 +17,7 @@
 namespace block_forumdashboard\metricitems;
 
 use context_course;
+use context_module;
 
 include_once(__DIR__ . '/../lib.php');
 
@@ -27,8 +28,10 @@ include_once(__DIR__ . '/../lib.php');
  * @copyright 2022 Ponlawat Weerapanpisit
  * @license https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class mediacount extends textbase
+class mediacount extends metricitem
 {
+    static $DISCUSSIONS_MODCONTEXTID_LOOKUP = [];
+
     /**
      * @var string
      */
@@ -62,10 +65,11 @@ class mediacount extends textbase
     public function get_value($scope, $userid)
     {
         $mediacount = 0;
-        $msgrecords = static::get_messagerecords($scope, $userid);
-        foreach ($msgrecords as $msgrecord) {
-            $medianumresult = report_discussion_metrics_get_mulutimedia_num($msgrecord->message);
+        $posts = $this->getposts($scope, $userid);
+        foreach ($posts as $post) {
+            $medianumresult = report_discussion_metrics_get_mulutimedia_num($post->message);
             $mediacount += ($medianumresult ? $medianumresult->num : 0);
+            $mediacount += $this->getmediaattachmentscount($post);
         }
 
         return $mediacount;
@@ -84,5 +88,28 @@ class mediacount extends textbase
         }
 
         return $sum / count($users);
+    }
+
+    private function getposts($scope, $userid)
+    {
+        global $DB;
+        return $scope ?
+            $DB->get_records_sql('select posts.* from {forum_posts} posts ' .
+                'join {forum_discussions} discussions on posts.discussion = discussions.id '  .
+                'where discussions.course = ? and posts.userid = ?', [$scope, $userid])
+            : $DB->get_records_sql('select * from {forum_posts} where userid = ?', [$userid]);
+    }
+
+    private function getmediaattachmentscount($post)
+    {
+        global $DB;
+        if (!isset(self::$DISCUSSIONS_MODCONTEXTID_LOOKUP[$post->discussion])) {
+            $discussion = $DB->get_record('forum_discussions', ['id' => $post->discussion], '*', MUST_EXIST);
+            $cm = get_coursemodule_from_id('forum', $discussion->forum, $discussion->course, false, MUST_EXIST);
+            $modulecontext = context_module::instance($cm->id);
+            self::$DISCUSSIONS_MODCONTEXTID_LOOKUP[$post->discussion] = $modulecontext->id;
+        }
+
+        return block_forumdashboard_countattachmentmultimedia(self::$DISCUSSIONS_MODCONTEXTID_LOOKUP[$post->discussion], $post->id);
     }
 }

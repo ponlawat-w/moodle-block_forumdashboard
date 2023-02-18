@@ -189,6 +189,21 @@ function block_forumdashboard_getmynotifications()
     return $DB->get_records('notifications', ['component' => 'block_forumdashboard', 'useridto' => $USER->id, 'timeread' => NULL], 'timecreated desc');
 }
 
+function block_forumdashboard_countattachmentmultimedia($modcontextid, $postid) {
+    $count = 0;
+
+    $fs = get_file_storage();
+    $files = $fs->get_area_files($modcontextid, 'mod_forum', 'attachment', $postid);
+    foreach ($files as $file) {
+        $mimetype = $file->get_mimetype();
+        if (substr($mimetype, 0, 6) == 'image/' || substr($mimetype, 0, 6) == 'video/' || substr($mimetype, 0, 6) == 'audio/') {
+            $count++;
+        }
+    }
+
+    return $count;
+}
+
 /**
  * Count multimedia with methodologies from report_discussion_metrics plugin
  *
