@@ -105,7 +105,7 @@ class mediacount extends metricitem
         global $DB;
         if (!isset(self::$DISCUSSIONS_MODCONTEXTID_LOOKUP[$post->discussion])) {
             $discussion = $DB->get_record('forum_discussions', ['id' => $post->discussion], '*', MUST_EXIST);
-            $cm = get_coursemodule_from_id('forum', $discussion->forum, $discussion->course, false, MUST_EXIST);
+            $cm = get_coursemodule_from_instance('forum', $discussion->forum, $discussion->course, false, MUST_EXIST);
             $modulecontext = context_module::instance($cm->id);
             self::$DISCUSSIONS_MODCONTEXTID_LOOKUP[$post->discussion] = $modulecontext->id;
         }
