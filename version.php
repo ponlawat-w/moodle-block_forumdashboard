@@ -25,7 +25,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'block_forumdashboard';
-$plugin->version = 2023021801;
+$plugin->version = 2023030300;
 $plugin->requires = 2020061503;
 $plugin->depedencies = [
   'mod_forum' => 2020061501

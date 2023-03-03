@@ -59,12 +59,8 @@ class emax extends engagement
      */
     public function get_value($scope, $userid)
     {
-        for ($i = 3; $i > -1; $i--) {
-            if (static::getlevel($scope, $userid, $i) > 0) {
-                return $i + 1;
-            }
-        }
-        return 0;
+        $result = static::getresult($scope, $userid);
+        return $result->getmax();
     }
 
     /**

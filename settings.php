@@ -25,6 +25,7 @@
 defined('MOODLE_INTERNAL') || die;
 
 require_once(__DIR__ . '/lib.php');
+require_once(__DIR__ . '/classes/engagement.php');
 
 if ($ADMIN->fulltree) {
     $config = get_config('block_forumdashboard');
@@ -74,6 +75,15 @@ if ($ADMIN->fulltree) {
             '1',
             '1',
             '0'
+        )
+    );
+
+    $settings->add(
+        new admin_setting_configselect(
+            'block_forumdashboard/defaultengagementmethod',
+            get_string('engagement_admin_defaultmethod', 'block_forumdashboard'),
+            get_string('engagement_method_help', 'block_forumdashboard'),
+            \block_forumdashboard_engagement\engagement::THREAD_ENGAGEMENT, \block_forumdashboard_engagement\engagement::getselectoptions()
         )
     );
 }

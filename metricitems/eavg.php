@@ -59,18 +59,8 @@ class eavg extends engagement
      */
     public function get_value($scope, $userid)
     {
-        $value = 0;
-        $count = 0;
-        for ($i = 3; $i > -1; $i--) {
-            $level = $i + 1;
-            $levelvalue = static::getlevel($scope, $userid, $i);
-            $count += $levelvalue;
-            $value += ($level * $levelvalue);
-        }
-        if ($count == 0) {
-            return 0;
-        }
-        return $value / $count;
+        $result = static::getresult($scope, $userid);
+        return $result->getaverage();
     }
 
     /**

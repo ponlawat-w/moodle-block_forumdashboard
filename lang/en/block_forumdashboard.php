@@ -103,3 +103,14 @@ $string['identifier_wordcount_plural'] = '{$a} words';
 $string['notification_newreply'] = 'New reply to your post';
 $string['notification_newreplyin'] = 'New reply from {$a->fromuser} to your message in: {$a->discussionname}';
 $string['notification_linktopost'] = 'Post';
+
+$string['engagement_method'] = 'Engagement Method';
+$string['engagement_method_help'] = '<p>Engagement Calculation Method</p><strong>Person-to-Person Engagement:</strong> The engagement level increases each time a user replies to the same user in the same thread.<br><strong>Thread Total Count Engagement:</strong> The engagement level increases each time a user participate in the same thread.<br><strong>Thread Engagement:</strong> The engagement level increases each time a user participates in a reply where they already participated in the parent posts.';
+$string['engagement_persontoperson'] = 'Person-to-Person Engagement';
+$string['engagement_persontoperson_description'] = 'The engagement level increases each time a user replies to the same user in the same thread.';
+$string['engagement_threadtotalcount'] = 'Thread Total Count Engagement';
+$string['engagement_threadtotalcount_description'] = 'The engagement level increases each time a user participate in the same thread.';
+$string['engagement_threadengagement'] = 'Thread Engagement';
+$string['engagement_threadengagement_description'] = 'The engagement level increases each time a user participates in a reply where they already participated in the parent posts.';
+
+$string['engagement_admin_defaultmethod'] = 'Default Engagement Calculation Method';

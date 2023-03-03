@@ -16,6 +16,8 @@
 
 namespace block_forumdashboard\metricitems;
 
+require_once(__DIR__ . '/../classes/engagement.php');
+
 use context_course;
 
 /**
@@ -28,77 +30,84 @@ use context_course;
 abstract class engagement extends metricitem
 {
     /**
-     * Cron caches in array with first level key being course ID, second level key being user ID, third level key being engagement level
+     * Calculator caches with key being discussion ID and value being calculator
+     *
+     * @var \block_forumbashboard_engagement\engagementcalculator
+     */
+    protected static $CALCULATOR_CACHES = [];
+    
+    /**
+     * Result caches in array with first level key being course ID, second level key being user ID, then value to be result
      * 
      * @var array
      */
-    protected static $CRON_CACHES = [];
+    protected static $RESULT_CACHES = [];
 
     /**
-     * Get levels from cron caches
+     * Try get result, null if not set
      *
      * @param int $scope
      * @param int $userid
-     * @return int[]
+     * @return \block_forumdashboard_engagement\engagementresult|null
      */
-    protected function getcronlevels($scope, $userid)
-    {
-        if (!isset(static::$CRON_CACHES[$scope])) {
-            static::$CRON_CACHES[$scope] = [];
+    private static function trygetresult($scope, $userid) {
+        if (!isset(static::$RESULT_CACHES[$scope])) {
+            return null;
         }
-        if (!isset(static::$CRON_CACHES[$scope][$userid])) {
-            static::$CRON_CACHES[$scope][$userid] = static::getlevels($scope, $userid);
-        }
-
-        return static::$CRON_CACHES[$scope][$userid];
+        return isset(static::$RESULT_CACHES[$scope][$userid]) ? static::$RESULT_CACHES[$scope][$userid] : null;
     }
 
     /**
-     * Get engagement levels
+     * Set result
      *
      * @param int $scope
      * @param int $userid
-     * @return int[]
+     * @param \block_forumdashboard_engagement\engagementresult $result
      */
-    protected static function getlevels($scope, $userid)
+    private static function setresult($scope, $userid, $result) {
+        if (!isset(static::$RESULT_CACHES[$scope])) {
+            static::$RESULT_CACHES[$scope] = [];
+        }
+        static::$RESULT_CACHES[$scope][$userid] = $result;
+    }
+
+    /**
+     * Get calculator from discussion ID, might be cache
+     *
+     * @param int $discussionid
+     * @return \block_forumdashboard_engagement\engagementcalculator
+     */
+    private static function getcalculator($discussionid) {
+        if (!isset(static::$CALCULATOR_CACHES[$discussionid])) {
+            $engagementmethod = get_config('block_forumdashboard', 'defaultengagementmethod');
+            static::$CALCULATOR_CACHES[$discussionid] = \block_forumdashboard_engagement\engagement::getinstancefrommethod($engagementmethod, $discussionid);
+        }
+        return static::$CALCULATOR_CACHES[$discussionid];
+    }
+
+    /**
+     * Get engagement results
+     *
+     * @param int $scope
+     * @param int $userid
+     * @return \block_forumdashboard_engagement\engagementresult
+     */
+    protected static function getresult($scope, $userid)
     {
         global $DB;
-        $posts = $scope ?
-            $DB->get_records_sql('select posts.* from {forum_posts} posts join {forum_discussions} discussions on posts.discussion = discussions.id '
-                . 'where discussions.course = ? and posts.userid = ? and posts.parent > 0 order by posts.id', [$scope, $userid]) :
-            $DB->get_records_sql('select * from {forum_posts} where userid = ? and parent > 0 order by id', [$userid]);
-
-        $depths = [];
-        $levels = [0, 0, 0, 0];
-        foreach ($posts as $post) {
-            if (!isset($depths[$post->id])) {
-                $parent = $post->parent;
-                $depths[$post->id] = 1;
-                while ($parent > 0) {
-                    if ($parentpost = $DB->get_record('forum_posts', ['id' => $parent])) {
-                        if ($parentpost->userid == $userid) {
-                            if (isset($depths[$parentpost->id])) {
-                                unset($depths[$parentpost->id]);
-                            }
-                            $depths[$parentpost->id] = 0;
-                            $depths[$post->id]++;
-                        }
-                        $parent = $parentpost->parent;
-                    } else {
-                        $depths[$post->id] = 0;
-                        continue;
-                    }
-                }
-
-                if ($depths[$post->id] < 4) {
-                    $levels[$depths[$post->id] - 1]++;
-                } else {
-                    $levels[3]++;
-                }
-            }
+        $result = static::trygetresult($scope, $userid);
+        if ($result) {
+            return $result;
         }
 
-        return $levels;
+        $discussions = $DB->get_records('forum_discussions', $scope ? ['course' => $scope] : []);
+        $result = new \block_forumdashboard_engagement\engagementresult();
+        foreach ($discussions as $discussion) {
+            $calculator = static::getcalculator($discussion->id);
+            $result->add($calculator->calculate(($userid)));
+        }
+        static::setresult($scope, $userid, $result);
+        return $result;
     }
 
     /**
@@ -111,7 +120,11 @@ abstract class engagement extends metricitem
      */
     protected static function getlevel($scope, $userid, $level)
     {
-        return static::getlevels($scope, $userid)[$level];
+        if ($level > 4 || $level < 0) {
+            return -1;
+        }
+        $results = static::getresult($scope, $userid);
+        return $level < 4 ? $results->getlevel($level) : $results->getl4up();
     }
 
     /**
@@ -123,20 +136,11 @@ abstract class engagement extends metricitem
      */
     protected static function getlevelaverage($scope, $level)
     {
-        if ($scope) {
-            $users = get_enrolled_users(context_course::instance($scope));
-            $sum = 0;
-            foreach ($users as $user) {
-                $sum += static::getlevel($scope, $user->id, $level);
-            }
-            return $sum / count($users);
-        } else {
-            $users = get_users();
-            $sum = 0;
-            foreach ($users as $user) {
-                $sum += static::getlevel($scope, $user->id, $level);
-            }
-            return $sum / count($users);
+        $users = $scope ? get_enrolled_users(context_course::instance($scope)) : get_users();
+        $sum = 0;
+        foreach ($users as $user) {
+            $sum += static::getlevel($scope, $user->id, $level);
         }
+        return $sum / count($users);
     }
 }

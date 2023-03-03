@@ -57,7 +57,7 @@ class e1r extends engagement
      */
     public function get_value($scope, $userid)
     {
-        return static::getlevel($scope, $userid, 0);
+        return static::getlevel($scope, $userid, 1);
     }
 
     /**
@@ -66,6 +66,6 @@ class e1r extends engagement
      */
     public function get_average($scope)
     {
-        return static::getlevelaverage($scope, 0);
+        return static::getlevelaverage($scope, 1);
     }
 }
