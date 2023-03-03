@@ -116,7 +116,7 @@ class engagement {
         $mform->addElement('select', $elementname, get_string('engagement_method', static::COMPONENT), engagement::getselectoptions());
         $mform->addHelpButton($elementname, 'engagement_method', static::COMPONENT);
         if (is_null($defaultvalue)) {
-            $defaultvalue = get_config('report_discussion_metrics', 'defaultengagementmethod');
+            $defaultvalue = get_config(static::COMPONENT, 'defaultengagementmethod');
         }
         $mform->setDefault($elementname, $defaultvalue);
     }
@@ -401,7 +401,7 @@ class p2pengagement extends engagementcalculator {
                     $userengagement[$post->userid] = 0;
                 }
                 $userengagement[$post->userid]++;
-                if ($post->satisfiestime) {
+                if ($childpost->satisfiestime) {
                     $result->increase($userengagement[$post->userid]);
                 }
             }
@@ -442,7 +442,7 @@ class threadcountengagement extends engagementcalculator {
      */
     public function travel($userid, $post, $result, &$count) {
         foreach ($post->children as $childpost) {
-            if ($childpost->userid != $post->userid && $childpost->userid == $userid) {
+            if ($childpost->userid != $post->userid && $childpost->userid == $userid && $childpost->satisfiestime) {
                 $count++;
                 $result->increase($count);
             }
@@ -474,7 +474,7 @@ class threadengagement extends engagementcalculator {
     public function travel($userid, $post, $result, $level = 1) {
         foreach ($post->children as $childpost) {
             if ($childpost->userid != $post->userid && $childpost->userid == $userid) {
-                if ($post->satisfiestime) {
+                if ($childpost->satisfiestime) {
                     $result->increase($level);
                 }
                 $this->travel($userid, $childpost, $result, $level + 1);
