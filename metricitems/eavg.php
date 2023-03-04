@@ -60,7 +60,8 @@ class eavg extends engagement
     public function get_value($scope, $userid)
     {
         $result = static::getresult($scope, $userid);
-        return $result->getaverage();
+        $avg = $result->getaverage();
+        return $avg ? $avg : 0;
     }
 
     /**

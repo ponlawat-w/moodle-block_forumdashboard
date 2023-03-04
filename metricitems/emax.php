@@ -60,7 +60,8 @@ class emax extends engagement
     public function get_value($scope, $userid)
     {
         $result = static::getresult($scope, $userid);
-        return $result->getmax();
+        $max = $result->getmax();
+        return $max ? $max : 0;
     }
 
     /**
