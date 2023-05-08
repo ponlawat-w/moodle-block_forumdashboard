@@ -16,6 +16,9 @@
 
 namespace block_forumdashboard\metricitems;
 
+use context_course;
+use moodle_exception;
+
 /**
  * x
  * 
@@ -121,9 +124,13 @@ abstract class postcountbase extends metricitem
 
         $whereclause = count($conditions) > 0 ? 'WHERE ' . implode(' AND ', $conditions) : '';
 
-        $record = $DB->get_record_sql('SELECT AVG(p.resultcount) avgresult FROM (' .
-            'SELECT COUNT(*) resultcount FROM {forum_posts} posts ' . implode(' ', $joins) . ' ' . $whereclause .
-            ') p', array_merge($joinparameters, $parameters));
-        return $record->avgresult;
+        $record = $DB->get_record_sql(
+            'SELECT COUNT(*) resultcount FROM {forum_posts} posts ' . implode(' ', $joins) . ' ' . $whereclause,
+            array_merge($joinparameters, $parameters)
+        );
+
+        $enrolledcount = count_enrolled_users(context_course::instance($scope));
+
+        return $enrolledcount > 0 ? $record->resultcount / $enrolledcount : 0;
     }
 }
