@@ -184,9 +184,11 @@ abstract class metricitem
         if ($this->caching) {
             global $DB;
             $record = ($scope || $this->globalsensitive) ?
-                $DB->get_record_sql('SELECT avg(value) averagevalue FROM {block_forumdashboard_caches} WHERE itemid = ? AND course = ?', [$this->itemid, $scope]) :
-                $DB->get_record_sql('SELECT avg(value) averagevalue FROM {block_forumdashboard_caches} WHERE itemid = ?', [$this->itemid]);
-            return $record ? $record->averagevalue : 0;
+                $DB->get_record_sql('SELECT SUM(value) sumvalue FROM {block_forumdashboard_caches} WHERE itemid = ? AND course = ?', [$this->itemid, $scope]) :
+                $DB->get_record_sql('SELECT SUM(value) sumvalue FROM {block_forumdashboard_caches} WHERE itemid = ? AND course > 0', [$this->itemid]);
+            if (!$record) return 0;
+            $userscount = count(self::get_allusers($scope));
+            return $userscount ? $record->sumvalue / $userscount : 0;
         }
         $average = $this->get_average($scope);
         return is_null($average) ? '-' : $average;
@@ -243,5 +245,15 @@ abstract class metricitem
             'caching' => $this->caching
         ];
         return $OUTPUT->render_from_template('block_forumdashboard/metricitem', $data);
+    }
+
+    /**
+     * Get all users
+     *
+     * @param int $scope
+     * @return array
+     */
+    protected static function get_allusers($scope) {
+        return $scope ? get_enrolled_users(\core\context\course::instance($scope)) : get_users();
     }
 }

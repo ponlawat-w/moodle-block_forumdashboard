@@ -260,3 +260,11 @@ function report_discussion_metrics_get_mulutimedia_num($text)
     }
     return $count;
 }
+
+/**
+ * @return bool
+ */
+function block_forumdashbaord_reactforuminstalled() {
+    $pluginmanager = core_plugin_manager::instance();
+    return isset($pluginmanager->get_installed_plugins('local')['reactforum']);
+}

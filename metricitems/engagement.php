@@ -136,7 +136,7 @@ abstract class engagement extends metricitem
      */
     protected static function getlevelaverage($scope, $level)
     {
-        $users = $scope ? get_enrolled_users(context_course::instance($scope)) : get_users();
+        $users = self::get_allusers($scope);
         $sum = 0;
         foreach ($users as $user) {
             $sum += static::getlevel($scope, $user->id, $level);

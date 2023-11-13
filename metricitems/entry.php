@@ -28,7 +28,7 @@ include_once(__DIR__ . '/engagement.php');
 include_once(__DIR__ . '/postcountbase.php');
 include_once(__DIR__ . '/textbase.php');
 
-const BLOCK_FORUMDASHBOARD_METRICITEMS = [
+$BLOCK_FORUMDASHBOARD_METRICITEMS = [
     'discussioncount',
     'e1r',
     'e2r',
@@ -44,7 +44,12 @@ const BLOCK_FORUMDASHBOARD_METRICITEMS = [
     'wordcount'
 ];
 
-foreach (BLOCK_FORUMDASHBOARD_METRICITEMS as $metricitem) {
+if (block_forumdashbaord_reactforuminstalled()) {
+    $BLOCK_FORUMDASHBOARD_METRICITEMS[] = 'reactionsgiven';
+    $BLOCK_FORUMDASHBOARD_METRICITEMS[] = 'reactionsreceived';
+}
+
+foreach ($BLOCK_FORUMDASHBOARD_METRICITEMS as $metricitem) {
     include_once(__DIR__ . '/' . $metricitem . '.php');
 }
 
@@ -55,7 +60,9 @@ foreach (BLOCK_FORUMDASHBOARD_METRICITEMS as $metricitem) {
  */
 function block_forumdashboard_getclasses()
 {
+    global $BLOCK_FORUMDASHBOARD_METRICITEMS;
+
     return array_map(function ($name) {
         return 'block_forumdashboard\\metricitems\\' . $name;
-    }, BLOCK_FORUMDASHBOARD_METRICITEMS);
+    }, $BLOCK_FORUMDASHBOARD_METRICITEMS);
 }

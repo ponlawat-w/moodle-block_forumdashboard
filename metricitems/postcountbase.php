@@ -129,7 +129,7 @@ abstract class postcountbase extends metricitem
             array_merge($joinparameters, $parameters)
         );
 
-        $enrolledcount = count_enrolled_users(context_course::instance($scope));
+        $enrolledcount = count(self::get_allusers($scope));
 
         return $enrolledcount > 0 ? $record->resultcount / $enrolledcount : 0;
     }

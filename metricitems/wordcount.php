@@ -74,7 +74,7 @@ class wordcount extends textbase
      */
     public function get_average($scope)
     {
-        $users = $scope ? get_enrolled_users(context_course::instance($scope)) : get_users();
+        $users = self::get_allusers($scope);
         $sum = 0;
         foreach ($users as $user) {
             $sum += $this->get_value($scope, $user->id);

@@ -99,6 +99,12 @@ $string['identifier_test'] = 'Test';
 $string['item_wordcount'] = 'Words count';
 $string['identifier_wordcount'] = '{$a} word';
 $string['identifier_wordcount_plural'] = '{$a} words';
+$string['item_reactionsgiven'] = 'Reactions given';
+$string['identifier_reactionsgiven'] = '{$a} reaction given';
+$string['identifier_reactionsgiven_plural'] = '{$a} reactions given';
+$string['item_reactionsreceived'] = 'Reactions received';
+$string['identifier_reactionsreceived'] = '{$a} reaction received';
+$string['identifier_reactionsreceived_plural'] = '{$a} reactions received';
 
 $string['notification_newreply'] = 'New reply to your post';
 $string['notification_newreplyin'] = 'New reply from {$a->fromuser} to your message in: {$a->discussionname}';
