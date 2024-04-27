@@ -120,3 +120,7 @@ $string['engagement_threadengagement'] = 'Thread Engagement';
 $string['engagement_threadengagement_description'] = 'The engagement level increases each time a user participates in a reply where they already participated in the parent posts.';
 
 $string['engagement_admin_defaultmethod'] = 'Default Engagement Calculation Method';
+$string['engagement_admin_international'] = 'International Engagement Only';
+$string['engagement_admin_international_description'] = 'If true, engagement value increases only the interaction are from users with different country.';
+
+$string['engagement_international'] = 'International engagement only';

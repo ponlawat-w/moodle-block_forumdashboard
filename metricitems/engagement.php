@@ -80,7 +80,8 @@ abstract class engagement extends metricitem
     private static function getcalculator($discussionid) {
         if (!isset(static::$CALCULATOR_CACHES[$discussionid])) {
             $engagementmethod = get_config('block_forumdashboard', 'defaultengagementmethod');
-            static::$CALCULATOR_CACHES[$discussionid] = \block_forumdashboard_engagement\engagement::getinstancefrommethod($engagementmethod, $discussionid);
+            $international = get_config('block_forumdashboard', 'engagementinternational');
+            static::$CALCULATOR_CACHES[$discussionid] = \block_forumdashboard_engagement\engagement::getinstancefrommethod($engagementmethod, $discussionid, 0, 0, $international);
         }
         return static::$CALCULATOR_CACHES[$discussionid];
     }

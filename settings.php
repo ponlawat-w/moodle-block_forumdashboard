@@ -86,4 +86,13 @@ if ($ADMIN->fulltree) {
             \block_forumdashboard_engagement\engagement::THREAD_ENGAGEMENT, \block_forumdashboard_engagement\engagement::getselectoptions()
         )
     );
+
+    $settings->add(
+        new admin_setting_configcheckbox(
+            'block_forumdashboard/engagementinternational',
+            get_string('engagement_admin_international', 'block_forumdashboard'),
+            get_string('engagement_admin_international_description', 'block_forumdashboard'),
+            false
+        )
+    );
 }

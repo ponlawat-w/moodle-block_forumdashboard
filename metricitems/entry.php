@@ -55,8 +55,6 @@ foreach ($BLOCK_FORUMDASHBOARD_METRICITEMS as $metricitem) {
 
 /**
  * Get metric item classes
- *
- * @return void
  */
 function block_forumdashboard_getclasses()
 {
