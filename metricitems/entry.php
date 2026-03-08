@@ -41,6 +41,7 @@ $BLOCK_FORUMDASHBOARD_METRICITEMS = [
     'postcount',
     'replycount',
     'test',
+    'uniqueactiveday',
     'wordcount'
 ];
 
