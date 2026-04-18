@@ -20,7 +20,7 @@ class reactionsreceived extends metricitem {
         }
 
         $result = $DB->get_record_sql(
-            'SELECT COUNT(*) reactionsreceived FROM {reactforum_reacted} WHERE post IN ('
+            'SELECT COUNT(*) reactionsreceived FROM {local_reactforum_userreactions} WHERE post IN ('
             . 'SELECT id FROM {forum_posts} WHERE userid = ? AND discussion IN ('
             . 'SELECT id FROM {forum_discussions} WHERE 0 = ? OR course = ?'
             . '))',
@@ -41,7 +41,7 @@ class reactionsreceived extends metricitem {
 
         $result = $DB->get_record_sql(
             'SELECT SUM(stats.reactionsreceived) sumreactionsreceived FROM ('
-            . 'SELECT p.userid, COUNT(*) reactionsreceived FROM {reactforum_reacted} r'
+            . 'SELECT p.userid, COUNT(*) reactionsreceived FROM {local_reactforum_userreactions} r'
             . ' JOIN {forum_posts} p ON r.post = p.id'
             . ' JOIN {forum_discussions} c ON p.discussion = c.id'
             . ' WHERE 0 = ? OR course = ?'
